@@ -79,7 +79,8 @@ function App() {
           <IoSparklesSharp className="text-purple-600" />
           AI Text Summarizer
         </h1>
-        <p className="text-gray-600 mt-2">React Frontend + Node.js Backend</p>
+
+
       </div>
 
       <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-gray-200">

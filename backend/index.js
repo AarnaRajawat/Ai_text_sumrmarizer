@@ -9,7 +9,10 @@ const app = express();
 
 // 1. Middleware
 app.use(cors({
-  origin: "http://localhost:5173", // Your React/Vite port
+  origin: [
+      "http://localhost:5173",
+      "https://textsumrizer.netlify.app"
+    ],
   methods: ["POST", "GET"],
 }));
 app.use(express.json());
