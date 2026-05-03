@@ -35,12 +35,11 @@ function App() {
     setSummary("");
 
     try {
-      const response = await fetch("http://localhost:5000/summarize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-
+      const response = await fetch("https://summrize-backend.onrender.com/summarize", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ text }),
+});
       const data = await response.json();
 
       if (!response.ok) {
