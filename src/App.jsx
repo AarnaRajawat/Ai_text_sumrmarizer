@@ -9,6 +9,9 @@ function App() {
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  // 🔥 Use your deployed backend API
+  const API_URL = "https://summrize-backend-1.onrender.com/summarize";
+
   const countWords = (str) =>
     str.trim().split(/\s+/).filter((w) => w.length > 0).length;
 
@@ -35,11 +38,12 @@ function App() {
     setSummary("");
 
     try {
-      const response = await fetch("https://summrize-backend.onrender.com/summarize", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ text }),
-});
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -74,15 +78,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 text-black px-4 py-10">
       <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-          <IoSparklesSharp className="text-purple-600" />
-          AI Text Summarizer
+        <h1 className="text-5xl font-bold flex items-center justify-center gap-3">
+          AI Text Summarizer <IoSparklesSharp className="text-purple-600" />
         </h1>
-
-
       </div>
-
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-gray-200">
+        <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-gray-200">
         <label className="font-semibold mb-2 block">Enter your text</label>
 
         <textarea
@@ -138,6 +138,8 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* Your remaining UI code goes here */}
     </div>
   );
 }
