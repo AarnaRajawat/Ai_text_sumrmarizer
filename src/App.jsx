@@ -11,7 +11,7 @@ function App() {
   const [copied, setCopied] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  const API_URL = "https://your-render-backend-url.onrender.com/summarize";
+const API_URL = "https://summrize-backend-1.onrender.com/summarize";
 
   useEffect(() => {
     const saved = localStorage.getItem("darkMode") === "true";
