@@ -99,7 +99,11 @@ function App() {
       setSummary(data.summary);
     } catch (e) {
       console.error("Summarization error:", e);
-      setError(e.message || "Failed to generate summary. Please check your backend connection and try again.");
+      if (e.name === "TypeError" || (e.message && e.message.toLowerCase().includes("failed to fetch"))) {
+        setError("Cannot connect to backend server. Make sure your server is running (run 'npm run server' or 'npm run dev:all') on port 5000.");
+      } else {
+        setError(e.message || "Failed to generate summary. Please check your backend connection and try again.");
+      }
     } finally {
       setLoading(false);
     }
