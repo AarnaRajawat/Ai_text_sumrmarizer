@@ -29,8 +29,23 @@ function App() {
   const [summaryMode, setSummaryMode] = useState("concise");
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // API endpoints: prefer env var, fallback to local backend or render backend
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/summarize";
+  // API endpoints: prefer env var, fallback to local backend in dev or render backend in prod
+  const isDev = import.meta.env.DEV;
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    (isDev
+      ? "http://localhost:5000/summarize"
+      : "https://summrize-backend-1.onrender.com/summarize");
+
+  // Ping backend on initial load to wake up free cloud instance (Render spins down on idle)
+  useEffect(() => {
+    if (!isDev && API_URL.startsWith("http")) {
+      const pingUrl = API_URL.replace(/\/summarize$/, "/");
+      fetch(pingUrl).catch(() => {
+        // Silent catch for background wake-up ping
+      });
+    }
+  }, [isDev, API_URL]);
 
   // Clean up speech synthesis on unmount
   useEffect(() => {
@@ -100,7 +115,11 @@ function App() {
     } catch (e) {
       console.error("Summarization error:", e);
       if (e.name === "TypeError" || (e.message && e.message.toLowerCase().includes("failed to fetch"))) {
-        setError("Cannot connect to backend server. Make sure your server is running (run 'npm run server' or 'npm run dev:all') on port 5000.");
+        if (API_URL.includes("localhost") || API_URL.includes("127.0.0.1")) {
+          setError("Cannot connect to local backend server. Make sure your server is running (run 'npm run server' or 'npm run dev:all') on port 5000.");
+        } else {
+          setError("Cannot connect to cloud backend. The server on Render might be waking up from sleep (takes ~30-50s). Please wait a moment and try again.");
+        }
       } else {
         setError(e.message || "Failed to generate summary. Please check your backend connection and try again.");
       }
